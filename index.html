@@ -1,0 +1,469 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta name="keywords" content="图片服务器,formidable" />
+  <meta name="description" content="图片服务器" />
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no"> -->
+  <meta charset="utf-8" />
+  <title>NODEJS 媒体服务器</title>
+  <!-- <meta http-equiv="Expires" content="0">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-control" content="no-cache">
+	<meta http-equiv="Cache" content="no-cache"> -->
+  <link href="css/video-js.min.css?v=20180805" rel="stylesheet">
+
+  <script src="./fileServer/axios.js"></script>
+  <style>
+    body {
+      background-color: #F5F5D5;
+    }
+
+    h2 {
+      display: inline-block;
+      margin-left: 100px;
+      margin-right: 20px;
+    }
+
+    span {
+      color: #f00;
+      text-decoration: underline;
+      margin-left: 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .file {
+      font-size: 20px;
+      width: 340px;
+      height: 180px;
+      margin-left: 15px;
+      margin-top: 15px;
+    }
+
+    .button {
+      padding-left: 100px;
+    }
+
+    #container {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 25px 10px 0 10px;
+    }
+
+    .out {
+      display: block;
+      width: 100%;
+    }
+
+    #picture {
+      display: flex;
+      flex-flow: row wrap;
+      border: 5px solid #DCDCDC;
+    }
+
+    #audio {
+      display: flex;
+      flex-flow: row wrap;
+      border: 5px solid #DCDCDC;
+    }
+
+    #video {
+      display: flex;
+      flex-flow: row wrap;
+      border: 5px solid #DCDCDC;
+    }
+
+    .banner {
+      display: block;
+      height: 45px;
+      line-height: 45px;
+      font-size: 20px;
+      background-color: #DCDCDC;
+      padding-left: 25px;
+      font-weight: bold;
+      color: #5B5B5B;
+      box-shadow: 5px 5px 8px 2px #FFFACD;
+    }
+
+    .border {
+      display: block;
+      position: relative;
+      margin: 35px 45px;
+      background-color: #ffffff;
+      box-shadow: 5px 5px 8px 2px #F0F0F0;
+    }
+
+    p {
+      height: 30px;
+      line-height: 40px;
+      text-align: center;
+
+    }
+
+    strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 300px;
+      font-size: 14px;
+      color: #969696;
+      display: inline-block;
+    }
+
+    #progress {
+      display: inline-block;
+    }
+
+    .layer {
+      position: absolute;
+      width: 370px;
+      height: 210px;
+      top: 0px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .picLayer {
+      background-color: rgba(0, 0, 0, 0.1);
+      display: block;
+      height: 210px;
+      width: 370px;
+    }
+
+    .distance {
+      margin-top: -1px;
+    }
+
+    .warning {
+      display: block;
+      color: #f00;
+      margin-left: 100px;
+      font-weight: bold;
+    }
+
+    #tips {
+      margin: 10px 0 0 100px;
+      font-weight: bold;
+      color: black;
+      ;
+    }
+
+    #here {
+      color: red;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .download {
+      font-size: 12px;
+      color: green;
+    }
+
+    .video-js {
+      width: 370px;
+      height: 210px;
+    }
+
+    /* 视频暂停时也显示这个播放按钮 */
+
+    .vjs-paused .vjs-big-play-button,
+    .vjs-paused.vjs-has-started .vjs-big-play-button {
+      display: block;
+    }
+
+    /* video.js默认的播放按钮是圆角矩形，我们一般更熟悉播放按钮为圆形的： */
+
+    .video-js .vjs-big-play-button {
+      font-size: 2.5em;
+      line-height: 2.3em;
+      height: 2.5em;
+      width: 2.5em;
+      -webkit-border-radius: 2.5em;
+      -moz-border-radius: 2.5em;
+      border-radius: 2.5em;
+      background-color: #73859f;
+      background-color: rgba(115, 133, 159, .5);
+      border-width: 0.15em;
+      margin-top: -1.25em;
+      margin-left: -1.75em;
+    }
+
+    /* 中间的播放箭头 */
+
+    .vjs-big-play-button .vjs-icon-placeholder {
+      font-size: 1.63em;
+    }
+
+    /* 加载圆圈 */
+
+    .vjs-loading-spinner {
+      font-size: 2.5em;
+      width: 2em;
+      height: 2em;
+      border-radius: 1em;
+      margin-top: -1em;
+      margin-left: -1.5em;
+    }
+
+    /* video.js默认倒序显示时间，也就是视频播放的剩余时间。要显示当前的播放时间，以及总共视频时长，加2行CSS解决： */
+
+    .video-js .vjs-time-control {
+      display: block;
+    }
+
+    .video-js .vjs-remaining-time {
+      display: none;
+    }
+  </style>
+  <script>
+    var host = 'http://localhost'
+    window.onload = function () {
+      axios.get(`${host}:2000/`)
+        .then(function (res) {
+          if (res.request.responseText) {
+            // console.log("判断文件服务器是否开启",res.request.responseText)
+            const clickHere = document.getElementById('here');
+            clickHere.setAttribute("href", `${host}:2000/`);
+          }
+        })
+        .catch(function () {
+          document.getElementById('tips').innerHTML = "文件服务器没有开启！"
+        })
+    }
+
+    //点击上传
+    function upload() { //进行文件类型的校验
+      let filename, filesize;
+      let files = document.getElementById('imgToUpload').files;
+      let fileNum = document.getElementById('imgToUpload').files.length;
+      //文件类型和文件名校验
+      let i = 0;
+      if (fileNum) {
+        function submit() {
+          filename = document.getElementById('imgToUpload').files[i].name;
+          filesize = document.getElementById('imgToUpload').files[i].size;
+          if (!/\.mp4$|\.mp3$|\.jpg$|\.png$|\.gif$/gim.test(filename)) {
+            alert("不允许上传后缀名除|mp4|mp3|jpg|png|gif以外的媒体文件");
+            return
+          } else if (/#|%/g.test(filename)) {
+            alert("文件名不能包含%或#");
+            return
+          } else if (filesize > 4 * 1024 * 1024 * 1024) {
+            alert('文件大小超过4GB');
+            return
+          }
+          document.getElementById('btnSubmit').value = "上传中";
+          //如果有选择图片则上传图片
+          var formData = new FormData();
+          formData.append('files', files[i]);
+          var xhr = new XMLHttpRequest();
+          xhr.upload.addEventListener("progress", uploadProgress, false);
+          xhr.addEventListener("error", uploadFailed, false);
+          xhr.open('POST', `${host}:2002/Images`);
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+              console.log('上传成功' + xhr.responseText);
+              if (xhr.responseText === "非法类型的媒体") {
+                alert('非法类型的媒体');
+                window.location.reload();
+              } else if (xhr.responseText === "非法的文件名") {
+                alert('非法的文件名');
+                window.location.reload();
+              } else if (xhr.responseText === "文件大小超过4GB") {
+                alert('文件大小超过4GB');
+                window.location.reload();
+              } else {
+                alert('上传成功！')
+                i++
+                if (i >= fileNum) {
+                  window.location.reload();
+                  return;
+                }
+                submit();
+              }
+            }
+          };
+          xhr.send(formData);
+        }
+        submit()
+      }
+
+    }
+
+    function uploadProgress(evt) {
+      if (evt.lengthComputable) {
+        var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+        console.log("上传进度", percentComplete)
+        document.getElementById('progress').innerHTML = percentComplete.toString() + '%';
+      } else {
+        document.getElementById('progress').innerHTML = 'unable to compute';
+      }
+    }
+
+    function uploadFailed(evt) {
+      alert("上传失败");
+    }
+
+    //获取媒体列表并添加点击删除事件
+    axios.get(`${host}:2002/list`) //获取文件列表数据
+      .then(function (response) {
+        if (!response.request.responseText) return;
+        let array = response.request.responseText.split(",");
+        let length = array.length;
+        console.log("array", array);  //打印从服务器取回来的数据
+        for (let i = 0; i < length; i++) {
+          let img = document.createElement("img"); //创建预览图标签
+          let a = document.createElement("a"); //下载媒体,查看图片
+          let word = document.createElement("p"); //创建文件名和删除的父标签标签
+          let strong = document.createElement("strong"); //创建文件名的标签
+          let del = document.createElement("span"); //创建删除的标签
+          let div1 = document.createElement("div"); //创建最外层标签
+          let div2 = document.createElement("div"); //创建蒙层标签
+          let audio = document.createElement("audio");
+          let video = document.createElement("video");
+          let source = document.createElement("source");
+          let filename = document.createTextNode(array[i]); //创建文件名文本节点
+          let delText = document.createTextNode("删除") //创建删除文本节点
+          let downloadText = document.createTextNode("下载") //创建下载文本节点
+          img.setAttribute("title", array[i]); //设置提示信息
+          if (/\.mp3$/i.test(array[i])) {
+            div1.setAttribute("class", "border"); //设置最外层div的class
+            audio.setAttribute("id", `my-video`); //设置a标签的href属性
+            audio.setAttribute("class", 'video-js vjs-big-play-centered'); //设置audio标签的属性
+            audio.setAttribute("controls", `controls`);
+            audio.setAttribute("width", `370`);
+            audio.setAttribute("height", `210`);
+            audio.setAttribute("poster", `./pic/music.jpg`);
+            audio.setAttribute("data-setup", `{}`);
+            video.setAttribute("preload", `none`);
+            source.setAttribute("src", `./Images/${array[i]}`);
+            source.setAttribute("type", "audio/mp3");
+            audio.appendChild(source);
+            div1.appendChild(audio);
+            strong.appendChild(filename); //将文件名的文本节点添加到strong标签
+            strong.setAttribute("title", array[i]); //设置srong标签设置title属性
+            a.setAttribute("href", `./Images/${array[i]}`);
+            a.setAttribute("class", `download`);
+            a.appendChild(downloadText);
+            del.appendChild(delText); //将删除删除的文本节点添加到strong标签上
+            word.appendChild(strong); //将strong标签添加到p标签
+            word.appendChild(a);
+            word.appendChild(del); //将删除的div标签添加到p标签
+            div1.appendChild(word); //将p标签添加到最外层的div标签
+            let outter = document.getElementById("audio");
+            outter.appendChild(div1);
+          } else if (/\.mp4$/i.test(array[i])) {
+            div1.setAttribute("class", "border"); //设置最外层div的class
+            video.setAttribute("id", `my-video`); //设置a标签的href属性
+            video.setAttribute("class", 'video-js vjs-big-play-centered'); //设置audio标签的属性
+            video.setAttribute("controls", `controls`);
+            video.setAttribute("width", `370`);
+            video.setAttribute("height", `210`);
+            video.setAttribute("poster", `./pic/video.jpg`);
+            video.setAttribute("data-setup", `{}`);
+            video.setAttribute("preload", `none`);
+            source.setAttribute("src", `./Images/${array[i]}`);
+            source.setAttribute("type", "video/mp4");
+            video.appendChild(source);
+            div1.appendChild(video);
+            strong.appendChild(filename); //将文件名的文本节点添加到strong标签
+            strong.setAttribute("title", array[i]); //设置srong标签设置title属性
+            a.setAttribute("href", `./Images/${array[i]}`);
+            a.setAttribute("class", `download`);
+            a.appendChild(downloadText);
+            del.appendChild(delText); //将删除删除的文本节点添加到strong标签上
+            word.appendChild(strong); //将strong标签添加到p标签
+            word.appendChild(a);
+            word.appendChild(del); //将删除的div标签添加到p标签
+            div1.appendChild(word); //将p标签添加到最外层的div标签
+            let outter = document.getElementById("video");
+            outter.appendChild(div1);
+          } else if (/\.jpg$|\.png$|\.gif$/i.test(array[i])) {
+            img.setAttribute("src", `./Images/${array[i]}`);
+            img.setAttribute("class", "file"); //设置img标签的class
+            div1.setAttribute("class", "border"); //设置最外层div的class
+            div2.setAttribute("class", "picLayer"); //设置蒙层的class
+            a.setAttribute("href", `./Images/${array[i]}`); //设置a标签的href属性
+            a.setAttribute("title", array[i]); //设置a标签的title属性
+            word.setAttribute('class', 'distance')
+            div1.appendChild(img); //将img标签添加到最外层的div上
+            div1.appendChild(div2); //将蒙层标签添加到最外层的div上
+            a.appendChild(img); //将暂停按钮添加到a标签
+            strong.appendChild(filename); //将文件名的文本节点添加到strong标签
+            strong.setAttribute("title", array[i]); //设置srong标签设置title属性
+            del.appendChild(delText); //将删除删除的文本节点添加到strong标签上
+            word.appendChild(strong); //将strong标签添加到p标签
+            word.appendChild(del); //将删除的div标签添加到p标签
+            div2.appendChild(a); //将a标签添加到最外层的标签
+            div1.appendChild(div2);
+            div1.appendChild(word); //将p标签添加到最外层的div标签
+            let outter = document.getElementById("picture");
+            outter.appendChild(div1);
+          }
+        }
+        console.log("response", response);
+      })
+      .then(function () {
+        let spans = document.getElementsByTagName('span')  //这个是删除的标签
+        let strong = document.getElementsByTagName('strong')  //这个是文件名的标签
+        let spansLength = spans.length;
+        for (let i = 0; i < spansLength; i++) {
+          //为删除字样绑定点击事件
+          spans[i].addEventListener('click', function () {
+            event.stopPropagation();
+            console.log((`${host}:2002/delete/${strong[i].innerHTML}`))  //打印要删除的文件信息
+            if (window.confirm("确定要删除吗?")) {
+              axios.get(`${host}:2002/delete/${strong[i].innerHTML}`)  //编码文件名
+                .then(response => {
+                  console.log("删除文件的响应", response);
+                  if (response.request.responseText === '文件已删除') {   //如果文件已被其他用户删除,则给出提示
+                    alert("文件已删除!");
+                    location.reload();
+                    return;
+                  }
+                  alert("删除成功!");
+                  location.reload();
+                })
+                .catch(error => {
+                  console.log("删除文件过程中发生了错误", error)
+                })
+              console.log(`${host}:2002/delete/${strong[i].innerHTML.substring(2)}`)
+            }
+          }, false)
+        }
+      })
+      .catch(function (error) {
+        console.log("发生了错误", error);
+      })
+  </script>
+</head>
+
+<body>
+
+  <h2 class='head'> 媒体列表 </h2>
+
+  <input type="file" id="imgToUpload" name="imgUploader" multiple />
+  <input type="button" name="submit" id="btnSubmit" value="上传" onclick="upload()" />
+  <div id='progress'></div>
+  <div class="warning">切勿上传非jpg|png|gif|mp3|mp4类型的文件,单文件大小不得超过4GB!</div>
+  <div id="tips">如果需要上传可执行文件，请点击<a id="here">这里</a>
+  </div>
+  <div id="container">
+    <div class="out">
+      <div class="banner">图片区</div>
+      <div id="picture"></div>
+    </div>
+    <div class="out">
+      <div class="banner">音乐区</div>
+      <div id="audio"></div>
+    </div>
+    <div class="out">
+      <div class="banner">视频区</div>
+      <div id="video"></div>
+    </div>
+  </div>
+  <script src="js/video.min.js?v=20180805"></script>
+</body>
+
+</html>

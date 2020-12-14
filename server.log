@@ -1,0 +1,67 @@
+undefined[2020-12-14 13:01:18.193]  [INFO]   服务启动成功,正在监听2002端口
+[2020-12-14 13:01:28.793]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",1
+[2020-12-14 13:01:28.831]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:01:28.836]  [ERROR]  uncaughtException  [ext] "Error: ENOENT: no such file or directory, scandir 'D:\\project\\mine\\nodejs_media_server\\Images'\n    at Object.readdirSync (fs.js:854:3)\n    at Server.<anonymous> (D:\\project\\mine\\nodejs_media_server\\media_server.js:126:24)\n    at Server.emit (events.js:210:5)\n    at parserOnIncoming (_http_server.js:745:12)\n    at HTTPParser.parserOnHeadersComplete (_http_common.js:115:17)"
+[2020-12-14 13:01:54.985]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",2
+[2020-12-14 13:01:54.987]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:01:076.76]  [ERROR]  uncaughtException  [ext] "Error: ENOENT: no such file or directory, scandir 'D:\\project\\mine\\nodejs_media_server\\Images'\n    at Object.readdirSync (fs.js:854:3)\n    at Server.<anonymous> (D:\\project\\mine\\nodejs_media_server\\media_server.js:126:24)\n    at Server.emit (events.js:210:5)\n    at parserOnIncoming (_http_server.js:745:12)\n    at HTTPParser.parserOnHeadersComplete (_http_common.js:115:17)"
+[2020-12-14 13:02:36.249]  [INFO]   服务启动成功,正在监听2002端口
+[2020-12-14 13:02:42.651]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",1
+[2020-12-14 13:02:42.671]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:02:42.673]  [DEBUG]   server  反馈给ajax的请求  [ext] 0
+[2020-12-14 13:04:46.170]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",2
+[2020-12-14 13:04:46.171]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:04:46.202]  [DEBUG]   server  反馈给ajax的请求  [ext] 0
+[2020-12-14 13:04:50.726]  [DEBUG]   server  收到客户端的请求数量  [ext] "/Images","OPTIONS",3
+[2020-12-14 13:04:50.745]  [DEBUG]   server  收到客户端的请求数量  [ext] "/Images","POST",4
+[2020-12-14 13:04:50.746]  [INFO]   上传文件的访问者ip  [ext] "::1"
+[2020-12-14 13:04:50.768]  [INFO]   上传的是单文件  [ext] "004c2d0f7d175c128595a19804cb435.jpg"
+[2020-12-14 13:04:049.49]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",5
+[2020-12-14 13:04:049.49]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:04:072.72]  [DEBUG]   server  反馈给ajax的请求  [ext] 1
+[2020-12-14 13:05:21.297]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",6
+[2020-12-14 13:05:21.297]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:05:21.315]  [DEBUG]   server  反馈给ajax的请求  [ext] 1
+[2020-12-14 13:05:23.624]  [DEBUG]   server  收到客户端的请求数量  [ext] "/delete/004c2d0f7d175c128595a19804cb435.jpg","GET",7
+[2020-12-14 13:05:23.641]  [INFO]   删除文件的访问者ip  [ext] "::1"
+[2020-12-14 13:05:23.644]  [DEBUG]   server delete filename  [ext] "004c2d0f7d175c128595a19804cb435.jpg"
+[2020-12-14 13:05:23.647]  [INFO]   004c2d0f7d175c128595a19804cb435.jpg删除成功!
+[2020-12-14 13:05:26.117]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",8
+[2020-12-14 13:05:26.137]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:05:26.139]  [DEBUG]   server  反馈给ajax的请求  [ext] 0
+[2020-12-14 13:05:40.438]  [DEBUG]   server  收到客户端的请求数量  [ext] "/Images","OPTIONS",9
+[2020-12-14 13:05:40.462]  [DEBUG]   server  收到客户端的请求数量  [ext] "/Images","POST",10
+[2020-12-14 13:05:40.464]  [INFO]   上传文件的访问者ip  [ext] "::1"
+[2020-12-14 13:05:40.488]  [INFO]   上传的是单文件  [ext] "0bb16b0e6a918589c8865261c225a78.jpg"
+[2020-12-14 13:05:42.244]  [DEBUG]   server  收到客户端的请求数量  [ext] "/Images","OPTIONS",11
+[2020-12-14 13:05:42.274]  [DEBUG]   server  收到客户端的请求数量  [ext] "/Images","POST",12
+[2020-12-14 13:05:42.276]  [INFO]   上传文件的访问者ip  [ext] "::1"
+[2020-12-14 13:05:42.280]  [INFO]   上传的是单文件  [ext] "004c2d0f7d175c128595a19804cb435.jpg"
+[2020-12-14 13:05:42.916]  [DEBUG]   server  收到客户端的请求数量  [ext] "/Images","OPTIONS",13
+[2020-12-14 13:05:42.935]  [DEBUG]   server  收到客户端的请求数量  [ext] "/Images","POST",14
+[2020-12-14 13:05:42.952]  [INFO]   上传文件的访问者ip  [ext] "::1"
+[2020-12-14 13:05:42.973]  [INFO]   上传的是单文件  [ext] "cfa7b79f43d54e7ab2e7907f4ed675ee.jpg"
+[2020-12-14 13:05:45.884]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",15
+[2020-12-14 13:05:45.905]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:05:45.907]  [DEBUG]   server  反馈给ajax的请求  [ext] 3
+[2020-12-14 13:06:08.302]  [DEBUG]   server  收到客户端的请求数量  [ext] "/delete/cfa7b79f43d54e7ab2e7907f4ed675ee.jpg","GET",16
+[2020-12-14 13:06:08.322]  [INFO]   删除文件的访问者ip  [ext] "::1"
+[2020-12-14 13:06:08.324]  [DEBUG]   server delete filename  [ext] "cfa7b79f43d54e7ab2e7907f4ed675ee.jpg"
+[2020-12-14 13:06:08.326]  [INFO]   cfa7b79f43d54e7ab2e7907f4ed675ee.jpg删除成功!
+[2020-12-14 13:06:09.738]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",17
+[2020-12-14 13:06:09.756]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:06:09.757]  [DEBUG]   server  反馈给ajax的请求  [ext] 2
+[2020-12-14 13:06:11.613]  [DEBUG]   server  收到客户端的请求数量  [ext] "/delete/0bb16b0e6a918589c8865261c225a78.jpg","GET",18
+[2020-12-14 13:06:11.631]  [INFO]   删除文件的访问者ip  [ext] "::1"
+[2020-12-14 13:06:11.632]  [DEBUG]   server delete filename  [ext] "0bb16b0e6a918589c8865261c225a78.jpg"
+[2020-12-14 13:06:11.635]  [INFO]   0bb16b0e6a918589c8865261c225a78.jpg删除成功!
+[2020-12-14 13:06:12.975]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",19
+[2020-12-14 13:06:12.976]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:06:12.998]  [DEBUG]   server  反馈给ajax的请求  [ext] 1
+[2020-12-14 13:06:18.142]  [DEBUG]   server  收到客户端的请求数量  [ext] "/delete/004c2d0f7d175c128595a19804cb435.jpg","GET",20
+[2020-12-14 13:06:18.159]  [INFO]   删除文件的访问者ip  [ext] "::1"
+[2020-12-14 13:06:18.162]  [DEBUG]   server delete filename  [ext] "004c2d0f7d175c128595a19804cb435.jpg"
+[2020-12-14 13:06:18.164]  [INFO]   004c2d0f7d175c128595a19804cb435.jpg删除成功!
+[2020-12-14 13:06:18.995]  [DEBUG]   server  收到客户端的请求数量  [ext] "/list","GET",21
+[2020-12-14 13:06:017.17]  [INFO]   ajax访问者ip  [ext] "::1"
+[2020-12-14 13:06:018.18]  [DEBUG]   server  反馈给ajax的请求  [ext] 0
